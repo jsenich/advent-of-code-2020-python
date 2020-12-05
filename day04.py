@@ -2,8 +2,9 @@ import re
 from typing import Dict, List, Tuple
 
 
-def get_passports_from_input(puzzle_input:str) -> List[Dict[str, str]]:
+def get_passports_from_input(puzzle_input: str) -> List[Dict[str, str]]:
     parsed_passports = []
+
     for passport in puzzle_input.split('\n\n'):
         passport_dict = {}
         for field, field_value in (f.split(':') for f in passport.split()):
@@ -39,9 +40,10 @@ def validate_field(field_name: str, field_value: str) -> bool:
         if len(field_value.strip()) == 3 and field_value in ('amb', 'blu', 'brn', 'gry', 'grn', 'hzl', 'oth'):
             return True
     if field_name == 'hcl':
-        if len(field_value) == 7  and re.match(r'^#[0-9a-f]{6}$', field_value):
+        if len(field_value) == 7 and re.match(r'^#[0-9a-f]{6}$', field_value):
             return True
     return False
+
 
 def part_one(puzzle_input: str, required_fields: Tuple[str]) -> int:
     valid_passports_count = 0
@@ -52,6 +54,7 @@ def part_one(puzzle_input: str, required_fields: Tuple[str]) -> int:
         if passport_fields == required_fields:
             valid_passports_count += 1
     return valid_passports_count
+
 
 def part_two(puzzle_input: str, required_fields: Tuple[str]):
     valid_passports_count = 0
@@ -67,6 +70,7 @@ def part_two(puzzle_input: str, required_fields: Tuple[str]):
             valid_passports_count += 1
 
     return valid_passports_count
+
 
 if __name__ == '__main__':
     with open('day04_input.txt', 'r') as f:
