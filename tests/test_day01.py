@@ -11,10 +11,12 @@ expense_report = [
     1456
 ]
 
+
 def test_part_one():
     entries = find_entries(expense_report, 2)
     assert {1721, 299} == set(entries)
     assert 514579 == math.prod(entries)
+
 
 def test_part_two():
     entries = find_entries(expense_report, 3)

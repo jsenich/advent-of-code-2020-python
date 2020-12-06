@@ -2,10 +2,12 @@ import itertools
 import math
 from typing import List, Tuple
 
+
 def find_entries(expense_report: List[str], num_entries: int) -> Tuple[int]:
     for expenses in itertools.combinations(expense_report, num_entries):
         if sum(expenses) == 2020:
             return expenses
+
 
 if __name__ == '__main__':
     with open('day01_input.txt') as f:

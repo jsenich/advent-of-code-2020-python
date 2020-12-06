@@ -1,7 +1,7 @@
 from typing import List
 
 
-def part_one(puzzle_input: str) ->  List[int]:
+def part_one(puzzle_input: str) -> List[int]:
     group_counts = []
     for group in puzzle_input.split('\n\n'):
         unique_answers = set()
