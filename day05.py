@@ -1,36 +1,28 @@
 from typing import Set
 
 
-def get_seat_row(seat_code: str) -> int:
-    seat_rows = list(range(128))
+def parse_seat_code(seat_code: str, code_section: slice, range_count: int) -> int:
+    groups = list(range(range_count))
     last_letter = None
 
-    for i, letter in enumerate(seat_code[:7]):
-        if letter == 'F':
-            seat_rows = seat_rows[:len(seat_rows) // 2]
+    for i, letter in enumerate(seat_code[code_section]):
+        if letter in ('F', 'L'):
+            groups = groups[:len(groups) // 2]
         else:
-            seat_rows = seat_rows[len(seat_rows) // 2:]
+            groups = groups[len(groups) // 2:]
 
         last_letter = letter
-        # print(f'{min(seat_rows)} - {max(seat_rows)}')
+        # print(f'{min(groups)} - {max(groups)}')
 
-    return min(seat_rows) if last_letter == 'F' else max(seat_rows)
+    return min(groups) if last_letter in ('F', 'L') else max(groups)
+
+
+def get_seat_row(seat_code: str) -> int:
+    return parse_seat_code(seat_code, slice(7), 128)
 
 
 def get_seat_number(seat_code: str) -> int:
-    seat_colums = list(range(8))
-    last_letter = None
-
-    for i, letter in enumerate(seat_code[-3:]):
-        if letter == 'L':
-            seat_colums = seat_colums[:len(seat_colums) // 2]
-        else:
-            seat_colums = seat_colums[len(seat_colums) // 2:]
-
-        last_letter = letter
-        # print(f'{min(seat_colums)} - {max(seat_colums)}')
-
-    return min(seat_colums) if last_letter == 'L' else max(seat_colums)
+    return parse_seat_code(seat_code, slice(-3, None), 8)
 
 
 def get_boarded_seats(puzzle_input: str) -> Set[int]:
