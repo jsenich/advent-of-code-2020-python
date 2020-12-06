@@ -1,92 +1,63 @@
+from typing import Set
 
-def part_one(puzzle_input: str):
-    # test_input = 'FBFBBFFRLR'
 
+def get_seat_row(seat_code: str) -> int:
+    seat_rows = list(range(128))
+    last_letter = None
+
+    for i, letter in enumerate(seat_code[:7]):
+        if letter == 'F':
+            seat_rows = seat_rows[:len(seat_rows) // 2]
+        else:
+            seat_rows = seat_rows[len(seat_rows) // 2:]
+
+        last_letter = letter
+        # print(f'{min(seat_rows)} - {max(seat_rows)}')
+
+    return min(seat_rows) if last_letter == 'F' else max(seat_rows)
+
+
+def get_seat_number(seat_code: str) -> int:
+    seat_colums = list(range(8))
+    last_letter = None
+
+    for i, letter in enumerate(seat_code[-3:]):
+        if letter == 'L':
+            seat_colums = seat_colums[:len(seat_colums) // 2]
+        else:
+            seat_colums = seat_colums[len(seat_colums) // 2:]
+
+        last_letter = letter
+        # print(f'{min(seat_colums)} - {max(seat_colums)}')
+
+    return min(seat_colums) if last_letter == 'L' else max(seat_colums)
+
+
+def get_boarded_seats(puzzle_input: str) -> Set[int]:
     seat_ids = set()
-    for seat_input in puzzle_input.split():
-        row_start = 0
-        row_end = 127
-        previous = None
-        op = None
-        for i, letter in enumerate(seat_input):
-            if i == 7:
-                break
+    for seat_code in puzzle_input.split():
+        row = get_seat_row(seat_code)
+        seat = get_seat_number(seat_code)
 
-            result = len(range(row_start, row_end)) // 2
-            if letter == 'F':
-                op = min
-                if previous and previous == 'F':
-                    row_end = result
-                else:
-                    row_end = row_start + result
-            elif letter == 'B':
-                op = max
-                if previous and previous == 'B':
-                    row_start += result + 1
-                else:
-                    row_start = row_end - result
+        seat_ids.add(row * 8 + seat)
 
-            previous = letter
-            print(f'{row_start} - {row_end}')
-
-        final_row = min(row_start, row_end)
-        print(f'Row: {final_row}')
-
-        seat_start = 0
-        seat_end = 7
-        previous = None
-        op = None
-        for i, letter in enumerate(seat_input[-3:]):
-            result = len(range(seat_start, seat_end)) // 2
-            if letter == 'L':
-                op = min
-                if previous and previous == 'L':
-                    seat_end = result
-                else:
-                    seat_end = seat_start + result
-            elif letter == 'R':
-                op = max
-                if previous and previous == 'R':
-                    seat_start += result + 1
-                else:
-                    seat_start = seat_end - result
-
-            previous = letter
-            print(f'Seats: {seat_start} - {seat_end}')
-
-        seat = max(seat_start, seat_end)
-        print(f'Seat: {seat}')
-
-        seat_id = final_row * 8 + seat
-        print(f'Seat ID: {seat_id}')
-        seat_ids.add(seat_id)
-    return max(seat_ids), seat_ids
+    return seat_ids
 
 
-def chunks(lst, n):
-    """Yield successive n-sized chunks from lst."""
-    for i in range(0, len(lst), n):
-        yield lst[i:i + n]
+def part_one(puzzle_input: str) -> int:
+    return max(get_boarded_seats(puzzle_input))
+
+
+def part_two(puzzle_input: str) -> int:
+    sorted_seats = sorted(get_boarded_seats(puzzle_input))
+    for i, seat_id in enumerate(sorted_seats):
+        if seat_id + 2 == sorted_seats[i + 1] and seat_id + 1 != sorted_seats[i + 1]:
+            return seat_id + 1
 
 
 if __name__ == '__main__':
     with open('day05_input.txt', 'r') as f:
         puzzle_input = f.read().strip()
 
-    highest_id, filled_seats = part_one(puzzle_input)
-    print(f'Highest Seat ID: {highest_id}')
-    import pprint
-    pprint.pprint(list(chunks(list(filled_seats), 8)))
-    # pprint.pprint(list(filled_seats))
-
-    sorted_seats = sorted(list(filled_seats))
-    for i, num in enumerate(sorted_seats):
-
-        if num + 2 == sorted_seats[i + 1] and num + 1 != sorted_seats[i + 1]:
-            print(f"missing: {num + 2}")
-            break
-
-    # all_seats = set([i for i in range(highest_id + 1)])
-    # empty_seats = list(all_seats - filled_seats)
-    # print(f'empty seats: {empty_seats}')
-    # pprint.pprint(list(chunks(empty_seats, 8)))
+    print(f'Part 1 - Highest Seat ID: {part_one(puzzle_input)}')
+    print(f'Part 2 - My Seat ID: {part_two(puzzle_input)}')
