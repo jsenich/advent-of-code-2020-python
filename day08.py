@@ -2,7 +2,7 @@
 def part_one(puzzle_input) -> int:
     accumulator = 0
     instruction_pointer = 0
-    instructions = puzzle_input.split('\n')
+    instructions = puzzle_input.strip().split('\n')
     visited = set()
     while instruction_pointer not in visited:
         visited.add(instruction_pointer)
@@ -24,7 +24,7 @@ def part_one(puzzle_input) -> int:
 def part_two(puzzle_input: str) -> int:
     accumulator = 0
     instruction_pointer = 0
-    instructions = puzzle_input.split('\n')
+    instructions = puzzle_input.strip().split('\n')
     memory = instructions.copy()
     visited = set()
     change_attempted = set()
