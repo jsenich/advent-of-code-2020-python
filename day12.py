@@ -1,14 +1,6 @@
 from typing import List, Tuple
 
 
-test_input = """F10
-N3
-F7
-R90
-F11
-"""
-
-
 def turn(current_direction: str, turn_direction: str, degrees: int) -> str:
     distance_keys = ['N', 'E', 'S', 'W']
     current_index = distance_keys.index(current_direction)
@@ -23,7 +15,7 @@ def turn(current_direction: str, turn_direction: str, degrees: int) -> str:
 
 
 def part_one(puzzle_input: List[Tuple[str, int]]) -> int:
-    x, y = 0, 0
+    # x, y = 0, 0
 
     current_direction = 'E'
     distances = {
@@ -56,8 +48,6 @@ def part_one(puzzle_input: List[Tuple[str, int]]) -> int:
     return abs(distances['N'] - distances['S']) + abs(distances['E'] - distances['W'])
 
 
-
-
 if __name__ == '__main__':
     with open('day12_input.txt', 'r') as f:
         puzzle_input = [(line[0], int(line[1:])) for line in f.read().strip().split()]
@@ -65,4 +55,3 @@ if __name__ == '__main__':
     # puzzle_input = [(line[0], int(line[1:])) for line in test_input.strip().split()]
 
     print(f'Part 1: {part_one(puzzle_input)}')
-
