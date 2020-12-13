@@ -1,7 +1,7 @@
 import os
 import pytest
 
-from day12 import turn, part_one
+from day12 import part_one, part_two, turn, rotate_waypoints
 
 
 test_input = """F10
@@ -39,3 +39,28 @@ def test_part_one(puzzle_input: str, expected: int):
     instructions = [(line[0], int(line[1:])) for line in puzzle_input.split()]
 
     assert expected == part_one(instructions)
+
+
+@pytest.mark.parametrize('direction, degrees, expected', [
+    ('R', 90, {'E': 4, 'S': 1, 'W': 2, 'N': 3}),
+    ('L', 90, {'E': 2, 'S': 3, 'W': 4, 'N': 1}),
+    ('R', 180, {'E': 3, 'S': 4, 'W': 1, 'N': 2}),
+    ('L', 180, {'E': 3, 'S': 4, 'W': 1, 'N': 2}),
+    ('R', 270, {'E': 2, 'S': 3, 'W': 4, 'N': 1}),
+    ('L', 270, {'E': 4, 'S': 1, 'W': 2, 'N': 3}),
+])
+def test_rotate_waypoints(direction, degrees, expected):
+    waypoints = {'E': 1, 'S': 2, 'W': 3, 'N': 4}
+
+    rotate_waypoints(waypoints, direction, degrees)
+    assert expected == waypoints
+
+
+@pytest.mark.parametrize('puzzle_input, expected', [
+    (test_input, 286),
+    (real_input, 42073),
+])
+def test_part_two(puzzle_input: str, expected: int):
+    instructions = [(line[0], int(line[1:])) for line in puzzle_input.split()]
+
+    assert expected == part_two(instructions)
